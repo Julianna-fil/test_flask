@@ -1,7 +1,6 @@
 from uuid import uuid4
 
-from flask import Flask
-
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
@@ -11,12 +10,11 @@ def data():
     def get_data():
         rows = []
         for i in range(10_000_000):
-            rows.append(str(uuid4()))
-        return '\n'.join(rows)
+            yield(str(uuid4()))
 
     res = get_data()
-    return app.response_class(res, mimetype='text/plain')
+    return render_template('data.html', res=res, mimetype='text/plain')
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
